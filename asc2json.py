@@ -1,5 +1,6 @@
 #--------------------------------
 # Converts ascii GIS grid to JSON
+# Ok, so it's not real json quite yet.
 #--------------------------------
 import string, sys, os
 
@@ -19,11 +20,16 @@ def asc2json(inFile, outFile):
     outJson.write('{\n' +'cols:'+cols +'rows:'+rows +'xllCorner:'+xllCorner +
                   'yllCorner:'+yllCorner +'cellSize:'+cellSize +'noDataVal:'+noDataVal +'directionData: [\n')
     # write cell data
-    lines = ascFile.readlines()
-    print lines
+    gridData = ascFile.read().split(' ')
+    for pxl in gridData:
+      if pxl == '-9999' or '-9999\n':
+        outJson.write('0, ')
+      else:
+        outJson.write(str(pxl[:5])+', ')
     # close out file
-    outJson.write(']\n}')
+    outJson.write('\n]\n}')
     outJson.close()
+    print 'whoomp, there it is.'
   except:
     print 'oh no. problems'
 
